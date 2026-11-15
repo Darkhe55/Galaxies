@@ -1,0 +1,30 @@
+{
+  "name": "galaxies-puzzle",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "星系（Galaxies）逻辑谜题：把棋盘划分成若干区域，每个区域恰好包含一个圆点并关于它 180° 旋转对称。",
+  "puzzle": {
+    "port": 5217,
+    "comment": "dev server 端口（vite.config.ts / scripts/dev.mjs / scripts/ui-check.mjs 都读这里，是唯一来源）"
+  },
+  "scripts": {
+    "dev": "vite",
+    "start": "node scripts/dev.mjs",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "gen": "node scripts/gen-puzzles.mjs",
+    "check": "node scripts/check.mjs",
+    "ui-check": "node scripts/ui-check.mjs",
+    "verify": "node scripts/ui-check.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.12",
+    "playwright-core": "^1.64.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.6"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  }
+}

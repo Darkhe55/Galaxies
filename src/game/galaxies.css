@@ -1,0 +1,145 @@
+/* ════════════════════════════════════════════════════════════════
+   星系（Galaxies）—— 游戏专用皮肤
+   暖纸底色 + 柔和区域色块；玩家画的边界是深墨色粗线，圆点是黑点。
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+  --gx-board: #f1ebdd;
+  --gx-board-edge: #b9ae98;
+  --gx-wall: #2d2a24;
+  --gx-grid: rgba(60, 55, 44, 0.12);
+  --gx-dot: #1c1b18;
+  --gx-bad: rgba(194, 59, 46, 0.2);
+  --gx-bad-line: #c23b2e;
+  --gx-warn: rgba(196, 92, 38, 0.12);
+}
+
+.board-svg.gx-board {
+  display: block;
+}
+
+.gx-board .gx-board-bg {
+  fill: var(--gx-board);
+  stroke: var(--gx-board-edge);
+  stroke-width: 1.5;
+}
+
+/* 区域填色：相邻区域颜色不同（渲染时贪心配色） */
+.gx-board .gx-region {
+  stroke: none;
+  pointer-events: none;
+}
+
+/* 浅网格线（尚未画边界的地方） */
+.gx-board .gx-grid-line {
+  stroke: var(--gx-grid);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+/* 玩家画的边界 */
+.gx-board .gx-wall {
+  stroke: var(--gx-wall);
+  stroke-width: 4;
+  stroke-linecap: round;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+}
+
+.gx-board .gx-wall.fx-string {
+  stroke: var(--loop-hot);
+  filter: drop-shadow(0 0 8px rgba(47, 155, 127, 0.75));
+}
+
+.gx-board .gx-outline {
+  fill: none;
+  stroke: var(--gx-wall);
+  stroke-width: 4.5;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+/* 圆点 */
+.gx-board .gx-dot-halo {
+  fill: rgba(255, 253, 248, 0.92);
+  pointer-events: none;
+}
+
+.gx-board .gx-dot {
+  fill: var(--gx-dot);
+  pointer-events: none;
+}
+
+.gx-board .gx-dot-group.bad .gx-dot {
+  fill: var(--error);
+}
+
+.gx-board .gx-dot-group.bad .gx-dot-halo {
+  fill: rgba(240, 215, 211, 0.95);
+  stroke: var(--error);
+  stroke-width: 1.5;
+}
+
+.gx-board .gx-dot-group.warn .gx-dot {
+  fill: var(--accent);
+}
+
+.gx-board .gx-dot-group.warn .gx-dot-halo {
+  fill: rgba(255, 247, 240, 0.95);
+  stroke: rgba(196, 92, 38, 0.7);
+  stroke-width: 1.5;
+}
+
+/* 错误 / 提示 */
+.gx-board .gx-cell-bad {
+  fill: var(--gx-bad);
+  stroke: var(--gx-bad-line);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 3;
+  pointer-events: none;
+}
+
+.gx-board .gx-cell-warn {
+  fill: var(--gx-warn);
+  stroke: rgba(196, 92, 38, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  pointer-events: none;
+}
+
+/* 边的透明命中层 */
+.gx-board .gx-edge-hit {
+  fill: transparent;
+  stroke: transparent;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.gx-board .gx-edge-hit:hover {
+  fill: rgba(31, 111, 92, 0.12);
+}
+
+/* 键盘光标（方向键移动 + 空格切换边界） */
+.gx-board .kb-cursor {
+  pointer-events: none;
+}
+
+.gx-board .kb-cursor-cell {
+  fill: rgba(196, 92, 38, 0.08);
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  rx: 6;
+}
+
+.gx-board .kb-cursor-edge {
+  stroke: var(--accent);
+  stroke-width: 7;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+/* 自定义题板提示文字里的圆点符号 */
+.custom-cell {
+  font-size: 14px;
+}
