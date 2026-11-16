@@ -43,8 +43,8 @@ const meta = {
   customIdPrefix: 'galaxies-custom-',
   customMinW: 4,
   customMinH: 4,
-  customMaxW: 20,
-  customMaxH: 20,
+  customMaxW: 30,
+  customMaxH: 30,
   targetKind: 'edge' as const,
   interactionHint:
     '<kbd>左键拖拽</kbd> 画边界 · <kbd>右键</kbd> 擦除 · <kbd>方向键</kbd> 移动光标 · <kbd>空格</kbd> 切换刚跨过的边界',
