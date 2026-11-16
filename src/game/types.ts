@@ -87,14 +87,24 @@ export function isVertexDot(dot: GalaxyDot): boolean {
   return (dot.x & 1) === 0 && (dot.y & 1) === 0
 }
 
+/**
+ * 圆点是否落在边中点（一条坐标为奇数、另一条为偶数）。
+ * 2 格多米诺等区域可以绕边中点 180° 对称，职业题面（如 puzzle-galaxies.com
+ * 的每月大题）会出现这种圆点，所以这里也支持。
+ */
+export function isEdgeDot(dot: GalaxyDot): boolean {
+  return ((dot.x & 1) === 1) !== ((dot.y & 1) === 1)
+}
+
 export function isValidDot(dot: GalaxyDot): boolean {
-  return isCenterDot(dot) || isVertexDot(dot)
+  return isCenterDot(dot) || isVertexDot(dot) || isEdgeDot(dot)
 }
 
 /**
  * 圆点「锚定」的格子：
  *   - 格心圆点：它所在的那 1 格；
- *   - 格点圆点：绕该格点的 2×2 四格（180° 对称 + 连通强制四格同区）。
+ *   - 格点圆点：绕该格点的 2×2 四格（180° 对称 + 连通强制四格同区）；
+ *   - 边中点圆点：共用这条边的 2 格（180° 交换）。
  */
 export function dotAnchors(w: number, h: number, dot: GalaxyDot): number[] {
   if (isCenterDot(dot)) {
@@ -108,6 +118,20 @@ export function dotAnchors(w: number, h: number, dot: GalaxyDot): number[] {
     const vy = dot.y / 2
     if (vx <= 0 || vy <= 0 || vx >= w || vy >= h) return []
     return [(vy - 1) * w + (vx - 1), (vy - 1) * w + vx, vy * w + (vx - 1), vy * w + vx]
+  }
+  if (isEdgeDot(dot)) {
+    if (dot.x & 1) {
+      // 水平边：上下两格
+      const cx = (dot.x - 1) / 2
+      const vy = dot.y / 2
+      if (cx < 0 || cx >= w || vy <= 0 || vy >= h) return []
+      return [(vy - 1) * w + cx, vy * w + cx]
+    }
+    // 垂直边：左右两格
+    const vx = dot.x / 2
+    const cy = (dot.y - 1) / 2
+    if (cy < 0 || cy >= h || vx <= 0 || vx >= w) return []
+    return [cy * w + (vx - 1), cy * w + vx]
   }
   return []
 }
@@ -265,7 +289,9 @@ export function puzzleIssues(puzzle: GalaxyPuzzle): string[] {
       else owner[a] = d
     }
   }
-  if (dots.length > B36.length) issues.push('圆点数量超过 36 个（编码上限）')
+  // 参考解用 base36 编码区域号，所以「有参考解」的题最多 36 个圆点；
+  // 识图导入的大题没有参考解（只是不能「显示解」），圆点数量本身不受编码限制。
+  if (puzzle.regions && dots.length > B36.length) issues.push('圆点数量超过 36 个（参考解编码上限）')
   if (puzzle.regions) {
     if (puzzle.regions.length !== size) issues.push('参考解长度不匹配')
     else {
