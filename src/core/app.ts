@@ -441,6 +441,7 @@ export function createApp(root: HTMLElement, adapter: GameAdapter) {
       'wheel',
       (e) => {
         e.preventDefault()
+        e.stopPropagation()
         const vb = clientToViewBox(svg, e.clientX, e.clientY)
         const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12
         view.setZoom(view.zoom * factor, vb ?? undefined)
@@ -450,6 +451,17 @@ export function createApp(root: HTMLElement, adapter: GameAdapter) {
 
     svg.addEventListener('pointerdown', (e) => {
       resumeAudio()
+      if (e.button === 1) {
+        // 中键拖动平移（滚轮缩放后也可用）
+        e.preventDefault()
+        dragState.dragging = true
+        dragState.moved = true
+        dragState.painting = null
+        dragState.pending = null
+        dragState.lastClient = { x: e.clientX, y: e.clientY }
+        svg.setPointerCapture(e.pointerId)
+        return
+      }
       if (e.button === 2) {
         const hit = hitAtClient(e.clientX, e.clientY)
         if (hit) {
